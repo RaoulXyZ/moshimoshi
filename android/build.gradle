@@ -1,0 +1,48 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+
+    // Workarounds for legacy Flutter plugins built against older AGP/Kotlin toolchains.
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            def androidExt = project.extensions.findByName("android")
+            // Inject a namespace from the AndroidManifest package attribute when missing (AGP 8+ requirement).
+            if (androidExt != null && androidExt.namespace == null) {
+                def manifestFile = project.file("src/main/AndroidManifest.xml")
+                if (manifestFile.exists()) {
+                    def matcher = manifestFile.text =~ /package\s*=\s*"([^"]+)"/
+                    def pkg = matcher ? matcher[0][1] : null
+                    if (pkg != null && !pkg.isEmpty()) {
+                        androidExt.namespace = pkg
+                    }
+                }
+            }
+            // Force JVM target 17 to match modern AGP defaults and resolve Java/Kotlin target mismatches.
+            if (androidExt != null) {
+                androidExt.compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+            }
+        }
+        project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+    }
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

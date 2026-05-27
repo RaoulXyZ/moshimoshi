@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(@\\(\"android\\\\app\\\\google-services.json\", \"ios\\\\Runner\\\\GoogleService-Info.plist\", \"web\\\\firebase-messaging-sw.js\"\\) | ForEach-Object { if \\(Test-Path $_\\) { \"$_ EXISTS\" } else { \"$_ not present\" } })"
+    ]
+  }
+}

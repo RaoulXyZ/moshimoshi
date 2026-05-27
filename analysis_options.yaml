@@ -1,0 +1,51 @@
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# invoked from the command line by running `flutter analyze`.
+
+# The following line activates a set of recommended lints for Flutter apps,
+# packages, and plugins designed to encourage good coding practices.
+
+linter:
+  rules:
+    prefer_relative_imports: true
+    prefer_final_locals: true
+    unnecessary_lambdas: true
+    unnecessary_late: true
+    unnecessary_parenthesis: true
+    use_named_constants: true
+    avoid_empty_else: true
+    avoid_print: true
+    empty_statements: true
+    hash_and_equals: true
+    use_build_context_synchronously: true
+    always_declare_return_types: true
+    avoid_init_to_null: true
+    avoid_unnecessary_containers: true
+    curly_braces_in_flow_control_structures: true
+    file_names: true
+    prefer_conditional_assignment: true
+    prefer_const_constructors: true
+    sized_box_for_whitespace: true
+
+  # The lint rules applied to this project can be customized in the
+  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
+  # included above or to enable additional rules. A list of all available lints
+  # and their documentation is published at
+  # https://dart-lang.github.io/linter/lints/index.html.
+  #
+  # Instead of disabling a lint rule for the entire project in the
+  # section below, it can also be suppressed for a single line of code
+  # or a specific dart file by using the `// ignore: name_of_lint` and
+  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
+  # producing the lint.
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+#
+# Note: dart_code_metrics analyzer plugin (v4) was removed because the
+# analyzer plugin system was dropped in Dart 3.4 / Flutter 3.22.
+# The rules below are kept for reference. To enforce them, migrate to
+# dart_code_metrics v5+ CLI or custom_lint.

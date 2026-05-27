@@ -1,0 +1,35 @@
+build_and_test_web_app:
+  stage: build
+  image: ghcr.io/cirruslabs/flutter:3.29.1
+  before_script:
+    - flutter pub get
+    - echo "QUALTRICS_URL=$QUALTRICS_URL" >> .env
+    - echo "QUALTRICS_TOKEN=$QUALTRICS_TOKEN" >> .env
+    - echo "FIREBASE_API_KEY=$FIREBASE_API_KEY" >> .env
+    - echo "FIREBASE_APP_ID=$FIREBASE_APP_ID" >> .env
+    - echo "FIREBASE_SENDER_ID=$FIREBASE_SENDER_ID" >> .env
+    - echo "FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID" >> .env
+    - echo "GITLAB_PROJECT_ID=$GITLAB_PROJECT_ID" >> .env
+    - echo "GITLAB_API_TOKEN=$GITLAB_API_TOKEN" >> .env
+    - echo "FIREBASE_AUTH_DOMAIN=$FIREBASE_AUTH_DOMAIN" >> .env
+    - echo "FIREBASE_STORAGE_BUCKET=$FIREBASE_STORAGE_BUCKET" >> .env
+    - echo "FIREBASE_MEASUREMENT_ID=$FIREBASE_MEASUREMENT_ID" >> .env
+    - echo "VAPID_KEY=$VAPID_KEY" >> .env
+    - echo "ADMIN_DEBUG_PASSWORD=$ADMIN_DEBUG_PASSWORD" >> .env
+  script:
+    - flutter build web --release --source-maps
+  artifacts:
+    paths:
+      - build/web
+
+pages:
+  stage: deploy
+  dependencies:
+    - build_and_test_web_app
+  script:
+    - cp -r build/web public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main

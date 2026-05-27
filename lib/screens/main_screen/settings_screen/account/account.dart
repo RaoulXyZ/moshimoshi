@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../../utility/mindblooming_color_scheme.dart';
+import '../../../../utility/mindblooming_text_style.dart';
+
+class Account extends StatelessWidget {
+  const Account({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: MindBloomingColorScheme.primary,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const SizedBox(width: 20),
+                InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icon_left_arrow.svg',
+                          colorFilter: const ColorFilter.mode(
+                            MindBloomingColorScheme.textColorDark,
+                            BlendMode.srcATop,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          "Indietro",
+                          style: MindBloomingTextStyle.pretitle,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                children: [
+                  Text(
+                    "Account",
+                    style: MindBloomingTextStyle.header1,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    "Account",
+                    style: MindBloomingTextStyle.header1,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Text(
+                "Nome: ",
+                style: MindBloomingTextStyle.header3,
+              ),
+            ),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Text(
+                "Cognome: ",
+                style: MindBloomingTextStyle.header3,
+              ),
+            ),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Text(
+                "Email: ",
+                style: MindBloomingTextStyle.header3,
+              ),
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+}
