@@ -42,12 +42,15 @@ FIREBASE_AUTH_DOMAIN=
 FIREBASE_STORAGE_BUCKET=
 FIREBASE_MEASUREMENT_ID=
 VAPID_KEY=
-GITLAB_PROJECT_ID=
-GITLAB_API_TOKEN=
+GITHUB_REPO_OWNER=
+GITHUB_REPO_NAME=
+GITHUB_API_TOKEN=
 ADMIN_DEBUG_PASSWORD=
 ```
 
-Firebase is initialized from these env vars on web (`Firebase.initializeApp(options: ...)`) and from `google-services.json` / `GoogleService-Info.plist` on native. The `.env` file is **gitignored** — CI injects it via GitLab CI/CD variables (see `.gitlab-ci.yml`).
+Firebase is initialized from these env vars on web (`Firebase.initializeApp(options: ...)`) and from `google-services.json` / `GoogleService-Info.plist` on native. The `.env` file is **gitignored** — CI must inject it (e.g. via GitHub Actions secrets) at build time.
+
+The in-app feedback FAB calls [lib/utility/github_feedback.dart](lib/utility/github_feedback.dart), which opens a GitHub issue on `GITHUB_REPO_OWNER/GITHUB_REPO_NAME` and uploads the screenshot to a `feedback-attachments` branch (auto-created on first use). The PAT in `GITHUB_API_TOKEN` needs `Issues: write` and `Contents: write` scopes on that repo.
 
 ## Architecture
 

@@ -60,7 +60,6 @@ dependencies:
   fluttertoast: ^8.2.2
   quickalert: ^1.1.0
   feedback: ^3.2.0
-  feedback_gitlab: ^3.0.0
   flutter_dotenv: ^5.2.1
   timelines_plus: ^1.0.6
   syncfusion_flutter_pdfviewer: ^28.2.12

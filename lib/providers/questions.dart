@@ -152,27 +152,37 @@ class Questions with ChangeNotifier {
   }
 
   Map<String, dynamic> questions(String surveyName, String blockName) {
-    return _questions[surveyName]['blocks'].containsKey(blockName)
-        ? _questions[surveyName]['blocks'][blockName].containsKey('questions')
-            ? Map<String, dynamic>.from(
-                _questions[surveyName]['blocks'][blockName]['questions'],
-              )
-            : {}
-        : {};
+    final survey = _questions[surveyName];
+    if (survey is! Map) return {};
+    final blocks = survey['blocks'];
+    if (blocks is! Map || blocks[blockName] is! Map) return {};
+    final block = blocks[blockName] as Map;
+    if (block['questions'] is! Map) return {};
+
+    return Map<String, dynamic>.from(block['questions'] as Map);
   }
 
   Map<String, dynamic> blocks(String surveyName) {
-    return Map<String, dynamic>.from(_questions[surveyName]['blocks']);
+    final survey = _questions[surveyName];
+    if (survey is! Map || survey['blocks'] is! Map) return {};
+
+    return Map<String, dynamic>.from(survey['blocks'] as Map);
   }
 
   String surveyID(String surveyName) {
-    return _questions[surveyName]['id'];
+    final survey = _questions[surveyName];
+    if (survey is! Map || survey['id'] is! String) return '';
+
+    return survey['id'] as String;
   }
 
   String surveyName(String surveyID) {
-    return _questions.entries
-        .firstWhere((element) => element.value['id'] == surveyID)
-        .key;
+    for (final entry in _questions.entries) {
+      final value = entry.value;
+      if (value is Map && value['id'] == surveyID) return entry.key;
+    }
+
+    return '';
   }
 
   Widget buildQuestion({

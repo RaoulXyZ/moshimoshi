@@ -22,6 +22,7 @@ import './providers/user_settings.dart';
 import './providers/safety_planning.dart';
 import './models/daily_screening.dart';
 import './models/weekly_screening.dart';
+import './utility/github_feedback.dart';
 import './utility/local_user.dart';
 import './utility/mindblooming_color_scheme.dart';
 import './utility/notification_api.dart';
@@ -102,11 +103,36 @@ class Main extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => Calendar()),
         ChangeNotifierProvider(create: (_) => SafetyPlanning()),
       ],
-      child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Moshi Moshi',
-        theme: ThemeData(colorScheme: colorScheme),
-        home: const LoadingScreen(),
+      child: Stack(
+        children: [
+          GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Moshi Moshi',
+            theme: ThemeData(colorScheme: colorScheme),
+            home: const LoadingScreen(),
+          ),
+          Positioned(
+            top: 16,
+            right: 16,
+            child: FloatingActionButton(
+              backgroundColor: MindBloomingColorScheme.secondary,
+              onPressed: () {
+                BetterFeedback.of(context).show((feedback) async {
+                  await uploadFeedbackToGitHub(
+                    feedback,
+                    owner: dotenv.env['GITHUB_REPO_OWNER']!,
+                    repo: dotenv.env['GITHUB_REPO_NAME']!,
+                    token: dotenv.env['GITHUB_API_TOKEN']!,
+                  );
+                });
+              },
+              child: const Icon(
+                Icons.feedback,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
