@@ -239,11 +239,14 @@ class DailyIndicator extends StatelessWidget {
                 shape: const CircleBorder(),
                 color: Colors.transparent,
                 child: InkWell(
-                  // disabilita anche il tasto circolare quando non è tappabile
-                  onTap:
-                      (ds.done || (!isSameDay(cp.focusedDay, DateTime.now())))
-                          ? null
-                          : () => _onTap(context),
+                  // disabilita anche il tasto circolare quando non è tappabile.
+                  // In debug saltiamo il vincolo "solo oggi" così da poter
+                  // rispondere subito a qualsiasi giornaliero, come la card sopra.
+                  onTap: (ds.done ||
+                          (!debug &&
+                              (!isSameDay(cp.focusedDay, DateTime.now()))))
+                      ? null
+                      : () => _onTap(context),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 8,

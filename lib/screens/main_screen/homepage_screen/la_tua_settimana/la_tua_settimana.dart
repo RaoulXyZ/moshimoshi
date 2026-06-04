@@ -172,7 +172,6 @@ class WeeklyIndicator extends StatelessWidget {
     final qP = Provider.of<Questions>(context);
     // final ap = Provider.of<Answers>(context);
     final mp = Provider.of<Moduli>(context);
-    final cp = Provider.of<Calendar>(context);
     final debug = Provider.of<UserSettings>(context).debug;
     // Rendi i valori nullable e gestiscili in modo sicuro
     // final String surveyID = qP.surveyID(ws.surveyName);
@@ -220,9 +219,9 @@ class WeeklyIndicator extends StatelessWidget {
     // --- LOGICA 48h basata sulla unlockDate derivata dalla chiave ---
     // final now = DateTime.now();
     final DateTime expireAt = unlockDate.add(const Duration(hours: 48));
-    final bool isExpired = debug
-        ? cp.focusedDay.isAfter(expireAt)
-        : DateTime.now().isAfter(expireAt);
+    // In debug il settimanale non scade mai: così durante i test è sempre
+    // possibile rispondere senza aspettare la finestra reale di 48h.
+    final bool isExpired = debug ? false : DateTime.now().isAfter(expireAt);
 
     // // final DateTime? normalizedUnlock = unlockDate != null
     // //     ? DateTime(unlockDate!.year, unlockDate!.month, unlockDate!.day)

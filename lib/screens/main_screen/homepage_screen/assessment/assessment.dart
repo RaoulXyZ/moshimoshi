@@ -204,7 +204,11 @@ class ScreeningIndicator extends StatelessWidget {
                 shape: const CircleBorder(),
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: (done || (!isSameDay(cp.focusedDay, DateTime.now())))
+                  // In debug saltiamo il vincolo "solo oggi" per poter aprire
+                  // subito lo screening, coerentemente con la card sopra.
+                  onTap: (done ||
+                          (!debug &&
+                              (!isSameDay(cp.focusedDay, DateTime.now()))))
                       ? null
                       : () => {
                             Navigator.of(context).push(
