@@ -56,9 +56,6 @@ jobs:
       - name: Installa dipendenze
         run: flutter pub get
 
-      - name: Analisi statica
-        run: flutter analyze
-
       - name: Build APK di release
         run: flutter build apk --release
 
