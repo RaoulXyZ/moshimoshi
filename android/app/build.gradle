@@ -22,6 +22,14 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+// Firma di release: caricata da android/key.properties se presente (CI / produzione).
+// Se il file non esiste, la release ricade sulla firma di debug (build locali).
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+}
+
 android {
     namespace "it.unimib.mindblooming"
     compileSdk 36
@@ -50,9 +58,20 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias keystoreProperties["keyAlias"]
+                keyPassword keystoreProperties["keyPassword"]
+                storeFile keystoreProperties["storeFile"] ? file(keystoreProperties["storeFile"]) : null
+                storePassword keystoreProperties["storePassword"]
+            }
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug
         }
     }
 
