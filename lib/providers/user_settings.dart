@@ -33,12 +33,19 @@ class UserSettings with ChangeNotifier {
   ];
   late String selectedPlant;
 
+  /// `surveyName` dei moduli (card della sezione Percorso) messi tra i preferiti.
+  late Set<String> favoriteModules;
+
   Future<void> init({bool isDemo = false, bool canSend = true}) async {
     await Hive.openBox("MoshiMoshi").then((value) => hive = value);
     selectedPlant = hive.get('plant', defaultValue: '0');
     this.canSend = hive.get('canSend', defaultValue: canSend);
     demo = hive.get('demo', defaultValue: isDemo);
     debug = hive.get('debug', defaultValue: false);
+
+    favoriteModules = Set<String>.from(
+      hive.get('favorite_modules', defaultValue: <String>[]) as List,
+    );
 
     notifica_giornaliera =
         hive.get('notifica_giornaliera', defaultValue: false);
@@ -314,6 +321,16 @@ class UserSettings with ChangeNotifier {
   void setDebug(bool v) {
     debug = v;
     hive.put('debug', v);
+    notifyListeners();
+  }
+
+  bool isFavorite(String surveyName) => favoriteModules.contains(surveyName);
+
+  void toggleFavorite(String surveyName) {
+    if (!favoriteModules.add(surveyName)) {
+      favoriteModules.remove(surveyName);
+    }
+    hive.put('favorite_modules', favoriteModules.toList());
     notifyListeners();
   }
 }

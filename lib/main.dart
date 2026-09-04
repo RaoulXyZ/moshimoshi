@@ -109,6 +109,16 @@ class Main extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Moshi Moshi',
             theme: ThemeData(colorScheme: colorScheme),
+            locale: const Locale('it', 'IT'),
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('it', 'IT'),
+              Locale('en'),
+            ],
             home: const LoadingScreen(),
           ),
           Positioned(

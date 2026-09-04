@@ -30,7 +30,9 @@ class ExerciseCard extends StatelessWidget {
     final mp = Provider.of<Moduli>(context);
     final qp = Provider.of<Questions>(context);
 
-    final debug = Provider.of<UserSettings>(context).debug;
+    final userSettings = Provider.of<UserSettings>(context);
+    final debug = userSettings.debug;
+    final bool isFavorite = userSettings.isFavorite(exercise.surveyName);
 
     final String displayModulo =
         mp.prettyName[exercise.modulo] ?? exercise.modulo;
@@ -144,7 +146,33 @@ class ExerciseCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 5),
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () => userSettings.toggleFavorite(
+                                    exercise.surveyName,
+                                  ),
+                                  highlightColor: Colors.transparent,
+                                  splashColor: MindBloomingColorScheme.tertiary,
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 5,
+                                    ),
+                                    child: Icon(
+                                      isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      size: 20,
+                                      color: isFavorite
+                                          ? MindBloomingColorScheme.secondary
+                                          : MindBloomingColorScheme
+                                              .textColorDark1shadow,
+                                    ),
+                                  ),
+                                ),
+                              ),
                               Material(
                                 color: Colors.transparent,
                                 child: InkWell(

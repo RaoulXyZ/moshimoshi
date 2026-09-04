@@ -8,7 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 enum NotifPermissionResult { granted, denied, permanentlyDenied }
 
-enum NotificationChannel { daily, weekly, lessons }
+enum NotificationChannel { daily, weekly, lessons, diary }
 
 class NotificationAPI {
   static final FlutterLocalNotificationsPlugin _notifications =
@@ -56,6 +56,14 @@ class NotificationAPI {
           'mind_blooming_lessons',
           'Lezioni',
           description: 'Promemoria delle lezioni dei tuoi moduli',
+          importance: Importance.max,
+        ),
+      );
+      await android.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'mind_blooming_diary',
+          'Promemoria diario',
+          description: 'Promemoria delle note del diario',
           importance: Importance.max,
         ),
       );
@@ -150,6 +158,49 @@ class NotificationAPI {
       debugPrint(
         'scheduleDaily id=$id $hour:$minute → fires at $when (now=${tz.TZDateTime.now(tz.local)})',
       );
+    }
+  }
+
+  /// Notifica singola (una tantum) a un istante preciso nel futuro.
+  static Future<void> scheduleOnce({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime when,
+    required NotificationChannel channel,
+  }) async {
+    await init();
+    final tzWhen = tz.TZDateTime.from(when, tz.local);
+    if (!tzWhen.isAfter(tz.TZDateTime.now(tz.local))) {
+      return;
+    }
+
+    try {
+      await _notifications.zonedSchedule(
+        id,
+        title,
+        body,
+        tzWhen,
+        await _notificationDetails(channel),
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
+    } on PlatformException {
+      await _notifications.zonedSchedule(
+        id,
+        title,
+        body,
+        tzWhen,
+        await _notificationDetails(channel),
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      );
+    }
+
+    if (kDebugMode) {
+      debugPrint('scheduleOnce id=$id → fires at $tzWhen');
     }
   }
 
@@ -276,6 +327,10 @@ class NotificationAPI {
         channelId = 'mind_blooming_lessons';
         channelName = 'Lezioni';
         channelDescription = 'Promemoria delle lezioni dei tuoi moduli';
+      case NotificationChannel.diary:
+        channelId = 'mind_blooming_diary';
+        channelName = 'Promemoria diario';
+        channelDescription = 'Promemoria delle note del diario';
     }
 
     return NotificationDetails(

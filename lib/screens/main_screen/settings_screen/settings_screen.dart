@@ -18,6 +18,7 @@ import '../../../utility/mindblooming_text_style.dart';
 import 'generali/generali.dart';
 import 'generali/notifiche/notifiche.dart';
 import 'moshimoshi/moshimoshi.dart';
+import 'preferiti/preferiti.dart';
 import 'tutorial/tutorial.dart';
 import '../../../utility/mindblooming_color_scheme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -93,6 +94,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const MoshiMoshi(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  CardCategoria(
+                    title: "Preferiti",
+                    subtitle: "I moduli che hai salvato",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const Preferiti(),
                         ),
                       );
                     },
